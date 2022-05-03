@@ -5,7 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
-  - MazeGeo
+  - Pellet
+  - Teleporter
+  - RightTeleporter
+  - LeftTeleporter
   layers:
   - Default
   - TransparentFX

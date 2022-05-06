@@ -9,6 +9,8 @@ TagManager:
   - Teleporter
   - RightTeleporter
   - LeftTeleporter
+  - Ghost
+  - PowerPellet
   layers:
   - Default
   - TransparentFX

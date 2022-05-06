@@ -8,11 +8,16 @@ public class chompScript : MonoBehaviour
     Rigidbody rb;
     NavMeshAgent pinkGhostAgent;
     TextMesh theScoreTextMesh;
+    TextMesh ghostModeTextMesh;
+
 
     public GameObject ScoreText;
+    public GameObject ModeText;
     public float speed = 20.0f;
     public GameObject pinkGhost;
 
+
+    private bool powerMode = false;
     private bool goForward = false;
     private bool goBackward = false;
     private bool goRight = false;
@@ -23,13 +28,25 @@ public class chompScript : MonoBehaviour
     {
         rb = this.gameObject.GetComponent<Rigidbody>();
         pinkGhostAgent = this.pinkGhost.GetComponent<NavMeshAgent>();
-        pinkGhostAgent.speed = 2.0f;
+        pinkGhostAgent.speed = 10.0f;
+
         this.theScoreTextMesh = this.ScoreText.GetComponent<TextMesh>();
+        this.ghostModeTextMesh = this.ModeText.GetComponent<TextMesh>();
     }
 
     void Start()
     {
         this.theScoreTextMesh.text = "Score: " + score;
+        this.ghostModeTextMesh.text = "Ghost: Deadly!";
+    }
+
+    IEnumerator PowerPellet()
+    {
+        powerMode = true;
+        this.ghostModeTextMesh.text = "Ghost: Edible!";
+        yield return new WaitForSeconds(10);
+        this.ghostModeTextMesh.text = "Ghost: Deadly!";
+        powerMode = false;
     }
 
     void OnTriggerEnter(Collider collision)
@@ -46,6 +63,23 @@ public class chompScript : MonoBehaviour
         else if(collision.gameObject.tag.Equals("LeftTeleporter"))
         {
            this.gameObject.transform.position = new Vector3(11.5f, .15f, 0.5f);
+        }
+        else if(collision.gameObject.tag.Equals("PowerPellet"))
+        {
+            StartCoroutine(PowerPellet()); 
+        } 
+        else if(collision.gameObject.tag.Equals("Ghost"))
+        {
+            if(powerMode == false)
+            {
+                Destroy(this.gameObject);
+            }
+            else if(powerMode == true)
+            {
+                Destroy(collision.gameObject);
+                score = score + 100;
+                this.theScoreTextMesh.text = "Score: " + score;
+            }
         }
     }
     
